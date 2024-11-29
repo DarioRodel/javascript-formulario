@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Registro</title>
+    <style>
+        /* Estilo para mostrar los mensajes de error en rojo */
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Formulario con validación -->
+    <form id="formularioRegistro" onsubmit="return validarFormulario();">
+
+        <!-- Campo para nombre -->
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Pon tu nombre" required>
+        <span id="errorNombre" class="error"></span> <!-- Mensaje de error para el campo 'nombre' -->
+        <br>
+
+        <!-- Campo para correo electrónico del usuario -->
+        <label for="correo">Correo Electrónico:</label>
+        <input type="email" id="correo" name="correo" required>
+        <span id="errorCorreo" class="error"></span> <!-- Mensaje de error para el campo 'correo' -->
+        <br>
+
+        <!-- Campo para contraseña del usuario -->
+        <label for="contrasena">Contraseña:</label>
+        <input type="password" id="contrasena" name="contrasena" required>
+        <span id="errorContrasena" class="error"></span> <!-- Mensaje de error para el campo 'contraseña' -->
+        <br>
+
+        <!-- Campo para repetir la contraseña -->
+        <label for="repetirContrasena">Repetir Contraseña:</label>
+        <input type="password" id="repetirContrasena" name="repetirContrasena" required>
+        <span id="errorRepetirContrasena" class="error"></span> <!-- Mensaje de error para el campo 'repetirContraseña' -->
+        <br>
+
+        <!-- Pregunta para verificar que no es un bot -->
+        <label for="suma">¿Cuánto es 5 + 3?</label>
+        <input type="text" id="suma" name="suma" required>
+        <span id="errorSuma" class="error"></span> <!-- Mensaje de error si la respuesta a la suma es incorrecta -->
+        <br>
+
+        <!-- Verificación para aceptar los términos -->
+        <input type="checkbox" id="acepto" name="acepto" value="acepto">
+        <label for="acepto">Acepto las condiciones</label>
+        <br>
+
+        <!-- Botón de envío que normalmente está deshabilitado -->
+        <button type="submit" id="crearCuenta" disabled>Crear cuenta</button> <!-- El botón está deshabilitado hasta que se marque la casilla 'Acepto las condiciones' -->
+    </form>
+
+    <script>
+        // Se habilitar/deshabilitar el botón de 'Crear cuenta' cuando se marca o desmarca la casilla de 'Acepto las condiciones'
+        document.getElementById('acepto').addEventListener('change', function () {
+            validarFormulario();  // Llama a la función de validación al marcar la casilla
+        });
+
+        // Función para todos los campos del formulario
+        function validarFormulario() {
+            let isValid = true; // Variable que indica si el formulario es válido
+
+            // Validación del nombre
+            let nombre = document.getElementById('nombre').value.trim();
+            if (nombre === '') { // Si el campo de nombre está vacío
+                document.getElementById('errorNombre').innerText = 'El nombre no puede estar vacío.'; // Muestra el mensaje de error
+                document.getElementById('nombre').focus();
+                isValid = false; // Establece que el formulario no es válido
+            } else {
+                document.getElementById('errorNombre').innerText = ''; // Si no hay error, limpia el mensaje de error
+            }
+
+            // Validación del correo electrónico
+            let correo = document.getElementById('correo').value.trim();
+            let validarCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expresión regular para validar un correo electrónico
+            if (!validarCorreo.test(correo)) { // Si el correo no es válido
+                document.getElementById('errorCorreo').innerText = 'Correo no válido.'; // Muestra el mensaje de error
+                document.getElementById('correo').focus();
+                isValid = false; // Marca el formulario como no válido
+            } else {
+                document.getElementById('errorCorreo').innerText = ''; // Si el correo es válido, limpia el mensaje de error
+            }
+
+            // Validación de la contraseña
+            let contrasena = document.getElementById('contrasena').value.trim();
+            const validarContrasena = /^(?=.*\d).{8,}$/; // Expresión regular para validar una contraseña con al menos 8 caracteres y un número
+            if (!validarContrasena.test(contrasena)) { // Si la contraseña no cumple con los requisitos
+                document.getElementById('errorContrasena').innerText = 'La contraseña debe tener al menos 8 caracteres y un número.'; // Muestra el mensaje de error
+                document.getElementById('contrasena').focus();
+                isValid = false; // Marca el formulario como no válido
+            } else {
+                document.getElementById('errorContrasena').innerText = ''; // Si la contraseña es válida, limpia el mensaje de error
+            }
+
+            // Validación de la repetición de la contraseña
+            let repetirContrasena = document.getElementById('repetirContrasena').value.trim();
+            if (contrasena !== repetirContrasena) { // Si las contraseñas no coinciden
+                document.getElementById('errorRepetirContrasena').innerText = 'Las contraseñas no coinciden.'; // Muestra el mensaje de error
+                document.getElementById('repetirContrasena').focus();
+                isValid = false; // Marca el formulario como no válido
+            } else {
+                document.getElementById('errorRepetirContrasena').innerText = ''; // Si las contraseñas coinciden, limpia el mensaje de error
+            }
+
+            // Validación de la operación (5 + 3)
+            let sumaComprobacion = document.getElementById('suma').value.trim();
+            if (sumaComprobacion != '8') { // Si la respuesta a la suma no es 8
+                document.getElementById('errorSuma').innerText = 'Respuesta incorrecta, eres un bot.'; // Muestra el mensaje de error
+                document.getElementById('suma').focus(); // Pone el foco en el campo de la suma
+                isValid = false; // Marca el formulario como no válido
+            } else {
+                document.getElementById('errorSuma').innerText = ''; // Si la respuesta es correcta, limpia el mensaje de error
+            }
+
+            // Habilitar o deshabilitar el botón dependiendo de si el formulario es válido y si la casilla 'acepto' está marcada
+            document.getElementById('crearCuenta').disabled = !isValid || !document.getElementById('acepto').checked;
+
+            return isValid; // Retorna el valor de isValid (true si todo es válido, false si hay errores)
+        }
+    </script>
+</body>
+</html>

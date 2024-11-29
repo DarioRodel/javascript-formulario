@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Registro</title>
+    <style>
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+        <!-- Formulario para registrar un usuario -->
+        <form id="formularioRegistro" action="grabar.php" method="POST" onsubmit="return validarFormulario();">
+            <!-- Campo para el nombre de usuario -->
+            <label for="usuario">Nombre usuario:</label>
+            <input type="text" id="usuario" name="usuario" placeholder="Nombre de usuario" required>
+            <span id="errorUsuario" class="error"></span> <!-- Mensaje de error para el nombre de usuario -->
+            <br>
+    
+            <!-- Campo para la contraseña -->
+            <label for="contrasena">Contraseña:</label>
+            <input type="password" id="contrasena" name="contrasena" placeholder="Contraseña" required>
+            <span id="errorContrasena" class="error"></span> <!-- Mensaje de error para la contraseña -->
+            <br>
+    
+            <!-- Selector de población -->
+            <label for="poblacion">Población:</label>
+            <select id="poblacion" name="poblacion" required>
+                <option value="">Seleccione </option>
+                <!-- Opciones de poblaciones -->
+                <option value="Algeciras">Algeciras</option>
+                <option value="Cádiz">Cádiz</option>
+                <option value="Jerez de la Frontera">Jerez de la Frontera</option>
+                <option value="La Línea de la Concepción">La Línea de la Concepción</option>
+                <option value="San Fernando">San Fernando</option>
+                <option value="Puerto Real">Puerto Real</option>
+            </select>
+            <span id="errorPoblacion" class="error"></span> <!-- Mensaje de error para la población -->
+            <br>
+    
+            <!-- Botón de envío -->
+            <button type="submit" id="crearCuenta">Registrar</button>
+        </form>
+        <script>
+            // Función de validación del formulario
+            function validarFormulario() {
+                let isValid = true;
+    
+                // Validación del campo nombre de usuario
+                let usuario = document.getElementById('usuario').value.trim();
+                if (usuario.length < 8 || usuario.includes(" ")) {
+                    document.getElementById('errorUsuario').innerText = 'El nombre de usuario debe tener al menos 8 caracteres y no debe contener espacios.';
+                    document.getElementById('usuario').focus();
+                    isValid = false;
+                } else {
+                    document.getElementById('errorUsuario').innerText = ''; // Limpiar mensaje si es válido
+                }
+    
+                // Validación del campo contraseña
+                let contrasena = document.getElementById('contrasena').value.trim();
+                let validarContrasena = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,10}$/;
+                if (!validarContrasena.test(contrasena)) {
+                    document.getElementById('errorContrasena').innerText = 'La contraseña debe tener entre 6 y 10 caracteres, al menos una mayúscula y un número.';
+                    document.getElementById('contrasena').focus();
+                    isValid = false;
+                } else {
+                    document.getElementById('errorContrasena').innerText = ''; // Limpiar mensaje si es válido
+                }
+    
+                // Validación del campo población
+                let poblacion = document.getElementById('poblacion').value.trim();
+                if (poblacion === "") {
+                    document.getElementById('errorPoblacion').innerText = 'El dato Población debe estar seleccionado.';
+                    document.getElementById('poblacion').focus();
+                    isValid = false;
+                } else {
+                    document.getElementById('errorPoblacion').innerText = ''; // Limpiar mensaje si es válido
+                }
+    
+                return isValid; // Retornar el estado de validación
+            }
+        </script>
+</body>
+</html>
